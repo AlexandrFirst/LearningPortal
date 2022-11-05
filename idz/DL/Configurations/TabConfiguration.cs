@@ -9,6 +9,7 @@ namespace idz.DL.Configurations
         public void Configure(EntityTypeBuilder<Tab> builder)
         {
             builder.HasMany(x => x.Links).WithOne(x => x.Tab).OnDelete(DeleteBehavior.Cascade);
+            builder.HasIndex(x => x.Name).IsUnique();
         }
     }
 }

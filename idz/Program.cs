@@ -1,5 +1,6 @@
 using AutoMapper;
 using idz.DL;
+using idz.DL.Triggers;
 using idz.Profiles;
 using idz.ReadModels;
 using idz.Services;
@@ -16,14 +17,25 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 string connectionString = builder.Configuration.GetRequiredSection("ConnectionString")["MMSDb"];
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+    options.UseTriggers(triggerOptions =>
+    {
+        triggerOptions.AddTrigger<DeleteLinkTrigger>();
+    });
+});
 
 builder.Services.AddSingleton<PasswordHelper>();
+builder.Services.AddSingleton<BackgroundQueue>();
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
 builder.Services.AddOptions<EmailOption>().Bind(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddOptions<PasswordOption>().Bind(builder.Configuration.GetSection("SecretUserKey"));
+builder.Services.AddOptions<CloudinaryOptions>().Bind(builder.Configuration.GetSection("CloudinarySettings"));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -40,12 +52,16 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         }
     };
+    options.ExpireTimeSpan = TimeSpan.Zero;
 });
 
 builder.Services.AddCors();
 
-var mapperConfig = new MapperConfiguration(mc => {
+var mapperConfig = new MapperConfiguration(mc =>
+{
     mc.AddProfile(new UserProfile());
+    mc.AddProfile(new TabProfile());
+    mc.AddProfile(new LinkProfile());
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);

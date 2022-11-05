@@ -11,7 +11,7 @@
         public UserRole UserRole { get; set; }
 
         public bool IsPending { get; set; }
-        public string ConfirmationToken { get; set; }
+        public Guid ConfirmationToken { get; set; }
         public DateTime ExperationTime { get; set; }
     }
 }
