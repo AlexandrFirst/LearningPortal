@@ -55,7 +55,18 @@ builder.Services.AddAuthentication(options =>
     options.ExpireTimeSpan = TimeSpan.Zero;
 });
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+    "CorsPolicy",
+    builder =>
+    {
+        builder.
+            AllowAnyOrigin().
+            AllowAnyHeader().
+            AllowAnyMethod();
+    });
+});
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -75,12 +86,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(policy =>
-{
-    policy.AllowAnyHeader();
-    policy.AllowAnyMethod();
-    policy.AllowAnyOrigin();
-});
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 
