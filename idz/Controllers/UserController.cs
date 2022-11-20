@@ -99,7 +99,7 @@ namespace idz.Controllers
                 UserRole = dbUser.UserRole
             };
 
-            return Ok(new { Message = "You are logged in" });
+            return Ok(userInfo);
         }
 
         [HttpPost("logout")]
