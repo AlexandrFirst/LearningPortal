@@ -74,6 +74,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new TabProfile());
     mc.AddProfile(new LinkProfile());
 });
+
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 

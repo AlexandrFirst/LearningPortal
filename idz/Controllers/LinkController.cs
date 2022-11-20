@@ -31,18 +31,17 @@ namespace idz.Controllers
         {
             LinkDto linkDto = new LinkDto();
             linkDto.Description = media.Description;
-
-            if (media.LinkType == LinkType.Link)
+            linkDto.ContentType = media.LinkType;
+            
+            if (!string.IsNullOrEmpty(media.Src))
             {
                 linkDto.Content = media.Src;
-                linkDto.ContentType = LinkType.Link;
             }
             else
             {
                 var uploadResult = await cloudinaryService.UploadFile(media.FileToUpload, media.LinkType);
                 linkDto.Content = uploadResult.Url;
-                linkDto.ContentType = LinkType.Link;
-
+                
                 linkDto.ResourceId = uploadResult.PublicId;
                 linkDto.Metadata = JsonConvert.SerializeObject(new
                 {
@@ -73,6 +72,8 @@ namespace idz.Controllers
             linkToUpdate.Description = media.Description;
             linkToUpdate.ContentType = media.LinkType;
 
+            linkToUpdate.Content = media.Src;
+
             if (media.FileToUpload != null)
             {
                 switch (media.LinkType)
@@ -81,21 +82,22 @@ namespace idz.Controllers
                         throw new Exception("Simple link can't have a source");
                     case LinkType.Pdf:
                     case LinkType.Video:
-                        var uploadResult = await cloudinaryService.UploadFile(media.FileToUpload, media.LinkType);
-                        if (!string.IsNullOrEmpty(linkToUpdate.ResourceId))
+                        if (media.FileToUpload != null)
                         {
-                            var deletionResult = await cloudinaryService.DeleteFile(linkToUpdate.ResourceId);
+                            var uploadResult = await cloudinaryService.UploadFile(media.FileToUpload, media.LinkType);
+                            if (!string.IsNullOrEmpty(linkToUpdate.ResourceId))
+                            {
+                                var deletionResult = await cloudinaryService.DeleteFile(linkToUpdate.ResourceId);
+                            }
+                            linkToUpdate.Content = uploadResult.Url;
+
+                            linkToUpdate.ResourceId = uploadResult.PublicId;
+                            linkToUpdate.Metadata = JsonConvert.SerializeObject(new
+                            {
+                                VideoDuration = uploadResult.Duration,
+                                Name = uploadResult.Name
+                            });
                         }
-                        linkToUpdate.Content = uploadResult.Url;
-                        linkToUpdate.ContentType = LinkType.Link;
-
-                        linkToUpdate.ResourceId = uploadResult.PublicId;
-                        linkToUpdate.Metadata = JsonConvert.SerializeObject(new
-                        {
-                            VideoDuration = uploadResult.Duration,
-                            Name = uploadResult.Name
-                        });
-
                         break;
                     default:
                         throw new Exception("unknown link type");
@@ -115,11 +117,6 @@ namespace idz.Controllers
             {
                 return NotFound(new { Message = "Link to delete is not found" });
             }
-
-            //if (!string.IsNullOrEmpty(linkToDelete.ResourceId)) 
-            //{
-            //    await cloudinaryService.DeleteFile(linkToDelete.ResourceId);
-            //}
 
             context.Links.Remove(linkToDelete);
             await context.SaveChangesAsync();
