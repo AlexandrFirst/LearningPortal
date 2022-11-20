@@ -57,8 +57,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(
-    "CorsPolicy",
+    options.AddDefaultPolicy(
+    
     builder =>
     {
         builder.
@@ -86,7 +86,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("CorsPolicy");
+app.UseCors();
 
 app.UseAuthentication();
 
