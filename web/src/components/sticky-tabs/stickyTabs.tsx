@@ -1,0 +1,104 @@
+import React, { SyntheticEvent, useState } from "react";
+import styles from "./stickyTabs.module.scss";
+
+import { Link } from "react-router-dom";
+import { Tab, Tabs } from "@mui/material";
+
+import { AddNewTabModal } from "components/add-new-tab-modal/addNewTabModal";
+
+import { AppRoute } from "routes";
+
+import { AddUpdateTabList } from "interfaces";
+
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { usePrevious } from "hooks/usePrevious";
+import { useHttpRequest } from "hooks/useHttpRequest";
+import { useAuth } from "hooks/useAuth";
+
+import { selectTabs, updateTabs } from "store/slices/tab.slice";
+
+import { tabApi } from "api/tab-api/tab.api";
+
+import { useAddNewTabModal } from "./useAddNewTabModal";
+
+export const StickyTabs: React.FC = () => {
+  const { tabs, firstTab } = useAppSelector(selectTabs);
+  const { isAdmin } = useAuth();
+
+  const dispatch = useAppDispatch();
+
+  const [getTabs] = useHttpRequest(tabApi.getTabs, {
+    withLoadingIndicator: true,
+  });
+  const [updateTabList] = useHttpRequest(tabApi.updateTabs);
+
+  const [currentTab, setCurrentTab] = useState(`/${firstTab?.id}`);
+  const prevTab = usePrevious(currentTab);
+
+  const { isModalOpened, handleCloseModal, handleOpenModal } =
+    useAddNewTabModal({ prevTab, setCurrentTab });
+
+  const handleChange = (e: SyntheticEvent) => {
+    setCurrentTab(e.currentTarget.id);
+  };
+
+  const handleSubmit = async ({ tabList }: AddUpdateTabList) => {
+    await updateTabList({
+      tabs: tabList.map((t) => ({
+        id: t.id ?? 0,
+        name: t.name ?? "",
+        links: t.links ?? [],
+        order: t.order ?? 0,
+      })),
+    });
+    const { data } = await getTabs();
+    dispatch(updateTabs(data ?? []));
+    handleCloseModal();
+  };
+
+  return (
+    <>
+      <Tabs
+        value={currentTab}
+        onChange={handleChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs"
+        className={styles.tabs}
+      >
+        {tabs ? (
+          tabs.map(({ id, name }) => {
+            const tabId = `/${id}`;
+            return (
+              <Tab
+                key={tabId}
+                id={tabId}
+                label={name}
+                value={tabId}
+                component={Link}
+                to={tabId}
+              />
+            );
+          })
+        ) : (
+          <Tab label={"Пасхалочка"} value={`/undefined`} />
+        )}
+        {isAdmin && (
+          <Tab
+            id={`/${AppRoute.AddTab}`}
+            value={`/${AppRoute.AddTab}`}
+            label={"+Додати/Змінити"}
+            onClick={handleOpenModal}
+            component={Link}
+            to={`/${AppRoute.AddTab}`}
+          />
+        )}
+      </Tabs>
+      <AddNewTabModal
+        isOpen={isModalOpened}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+      />
+    </>
+  );
+};
