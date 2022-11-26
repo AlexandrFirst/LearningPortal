@@ -14,8 +14,8 @@ class TabApi {
     return Post("link/addlink", request);
   }
 
-  updateLink(id: string, request: FormData) {
-    return Put(`link/updateLink/${id}`, request);
+  updateLink(req: { id: number; formData: FormData }) {
+    return Put(`link/updateLink/${req.id}`, req.formData);
   }
 
   deleteLink(id: string) {

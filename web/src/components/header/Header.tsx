@@ -20,7 +20,6 @@ import { useAuth } from "hooks/useAuth";
 import { resetUser } from "store/slices/auth.slice";
 
 import { User } from "./user/User";
-import { Translate } from "./translate/Translate";
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -60,7 +59,7 @@ export const Header: React.FC = () => {
           >
             ММС Портал
           </Typography>
-          <Translate onLangChanged={handleLangChanged} />
+          {/*<Translate onLangChanged={handleLangChanged} />*/}
           {isAuth ? (
             <>
               <User onLogout={handleLogout} />
@@ -74,4 +73,4 @@ export const Header: React.FC = () => {
       </Container>
     </AppBar>
   );
-};;
+};

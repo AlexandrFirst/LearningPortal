@@ -14,7 +14,7 @@ const defaultHttpRequestConfig: HttpRequestConfig<any> = {
   withLoadingIndicator: false,
 };
 
-export const useHttpRequest = <TArgs, TRes>(
+export const useHttpRequest = <TArgs = any, TRes = any>(
   request: (...arg: TArgs[]) => Promise<TRes | void>,
   httpRequestConfig?: Partial<HttpRequestConfig<TRes>>
 ): [

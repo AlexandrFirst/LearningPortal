@@ -1,7 +1,7 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import styles from "./stickyTabs.module.scss";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Tab, Tabs } from "@mui/material";
 
 import { AddNewTabModal } from "components/add-new-tab-modal/addNewTabModal";
@@ -25,7 +25,8 @@ import { error } from "../../store/slices/snackbar.slice";
 export const StickyTabs: React.FC = () => {
   const { tabs, firstTab } = useAppSelector(selectTabs);
   const { isAdmin } = useAuth();
-  console.log("===tabs===", tabs);
+
+  const { pathname } = useLocation();
 
   const dispatch = useAppDispatch();
 
@@ -49,7 +50,7 @@ export const StickyTabs: React.FC = () => {
       tabs: tabList.map((t) => ({
         id: t.id ?? 0,
         name: t.name ?? "",
-        links: t.links ?? [],
+        links: t.links?.map((l) => l.id) ?? [],
         order: t.order ?? 0,
       })),
     });
@@ -57,6 +58,10 @@ export const StickyTabs: React.FC = () => {
     isOk ? dispatch(updateTabs(data ?? [])) : dispatch(error({ message }));
     handleCloseModal();
   };
+
+  useEffect(() => {
+    setCurrentTab(pathname);
+  }, [pathname]);
 
   return (
     <>
@@ -91,8 +96,7 @@ export const StickyTabs: React.FC = () => {
             value={`/${AppRoute.AddTab}`}
             label={"+Додати/Змінити"}
             onClick={handleOpenModal}
-            component={Link}
-            to={`/${AppRoute.AddTab}`}
+            component={"div"}
           />
         )}
       </Tabs>

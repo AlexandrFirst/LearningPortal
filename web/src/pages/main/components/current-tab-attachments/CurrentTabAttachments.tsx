@@ -2,7 +2,7 @@ import React from "react";
 
 import { IAttachment } from "interfaces";
 
-import { List, ListItem } from "@mui/material";
+import { List, ListItem, Typography } from "@mui/material";
 import { CurrentTabAttachmentItem } from "./CurrentTabAttachmentItem";
 import { ITab } from "api/tab-api/tab.api.types";
 
@@ -26,7 +26,9 @@ export const CurrentTabAttachments: React.FC<CurrentTabLinksProps> = ({
           ))}
         </>
       ) : (
-        <h1>Схоже, ще нічого немає</h1>
+        <Typography variant={"h3"} sx={{ textAlign: "center" }}>
+          Схоже, на цій закладці ще нічого немає
+        </Typography>
       )}
     </List>
   );

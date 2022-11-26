@@ -1,6 +1,7 @@
 export * from "./id.type";
 export * from "./add-to-tab-list-form.type";
 export * from "./modal-return.type";
+export * from "./dinamic-tab-param.type";
 
 export * from "./user.interface";
 export * from "./tab.interface";

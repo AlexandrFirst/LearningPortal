@@ -20,6 +20,7 @@ import { AddEditDeleteModal } from "./add-edit-delete-modals.enum";
 import { ModalContextProvider } from "./components/modal-context/ModalContext";
 import { AddEditAttachmentModal } from "./components/modal-add-edit-attachment/AddEditAttachmentModal";
 import { DeleteAttachmentModal } from "./components/modal-delete-attachment/DeleteAttachmentModal";
+import { EmptyState } from "./components/empty-state/emptyState";
 
 type TabParam = {
   tabId: string;
@@ -47,7 +48,7 @@ export const Main: React.FC = () => {
   return (
     <>
       <ModalContextProvider context={{ activateModal, ...modalContext }}>
-        {currentTab && (
+        {currentTab ? (
           <Card className={styles.card}>
             <CurrentTabAttachments tab={currentTab} />
             {isAdmin && (
@@ -56,10 +57,10 @@ export const Main: React.FC = () => {
               </Button>
             )}
           </Card>
+        ) : (
+          <EmptyState />
         )}
-        <AddEditAttachmentModal
-        // onConfirm={handleConfirm}
-        />
+        <AddEditAttachmentModal />
         <DeleteAttachmentModal />
       </ModalContextProvider>
     </>

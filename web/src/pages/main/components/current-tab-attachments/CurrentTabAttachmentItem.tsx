@@ -21,7 +21,6 @@ interface CurrentTabLinksItemProps {
 export const CurrentTabAttachmentItem: React.FC<CurrentTabLinksItemProps> = ({
   link,
 }) => {
-  // const { type, link, label } = attachment;
   const { contentType, content, description } = link;
   const { isAdmin } = useAuth();
 

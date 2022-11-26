@@ -23,7 +23,7 @@ export const DummyMain: React.FC = () => {
       const { data, isOk, message } = await getTabs();
       if (isOk) {
         dispatch(updateTabs(data));
-        navigate(`/${firstTab?.id ?? "first"}`);
+        // navigate(`/${firstTab?.id ?? "first"}`);
       } else {
         dispatch(error({ message }));
       }
