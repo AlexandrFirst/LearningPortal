@@ -10,6 +10,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public virtual List<Link> Links { get; set; }
+        public virtual List<Test> Tests { get; set; }
         public int Order { get; set; }
     }
 }

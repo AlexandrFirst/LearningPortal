@@ -73,6 +73,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new UserProfile());
     mc.AddProfile(new TabProfile());
     mc.AddProfile(new LinkProfile());
+    mc.AddProfile(new TestProfile());
 });
 
 IMapper mapper = mapperConfig.CreateMapper();

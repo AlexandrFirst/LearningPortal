@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using idz.DL;
 
@@ -11,9 +12,10 @@ using idz.DL;
 namespace idz.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221126204025_Test api added")]
+    partial class Testapiadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,9 +124,6 @@ namespace idz.Migrations
                     b.Property<double>("LowThreshold")
                         .HasColumnType("float");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("TabId")
                         .HasColumnType("int");
 
@@ -205,7 +204,7 @@ namespace idz.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserTestResults");
+                    b.ToTable("UserTestResult");
                 });
 
             modelBuilder.Entity("idz.DL.Models.Link", b =>

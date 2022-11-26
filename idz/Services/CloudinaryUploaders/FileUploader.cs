@@ -12,11 +12,21 @@ namespace idz.Services.CloudinaryUploaders
 
         protected override async Task<RawUploadResult> MyUpload(Cloudinary cloudinary, FileUploadRequest param)
         {
-            var uploadParams = new ImageUploadParams()
+            var uploadParams = new VideoUploadParams()
             {
                 File = new FileDescription(param.Name, param.DataStream)
             };
-            ImageUploadResult result = await cloudinary.UploadAsync(uploadParams);
+
+            VideoUploadResult result = null;
+
+            if (param.Size >= 100 * 1024)
+            {
+                result = await cloudinary.UploadLargeAsync(uploadParams);
+            }
+            else
+            {
+                result = await cloudinary.UploadAsync(uploadParams);
+            }
 
             return result;
         }
