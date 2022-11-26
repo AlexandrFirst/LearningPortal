@@ -1,5 +1,5 @@
 import { Delete, Get, Post, Put } from "api/config";
-import { ITab, IUpdateTabsRequest } from "./tab.api.types";
+import { ILink, ITab, IUpdateTabsRequest } from "./tab.api.types";
 
 class TabApi {
   getTabs(): Promise<ITab[]> {
@@ -10,7 +10,7 @@ class TabApi {
     return Put("tab", request);
   }
 
-  createLink(request: FormData) {
+  createLink(request: FormData): Promise<ILink> {
     return Post("link/addlink", request);
   }
 

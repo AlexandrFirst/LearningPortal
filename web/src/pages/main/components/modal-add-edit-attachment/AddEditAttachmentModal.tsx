@@ -6,15 +6,12 @@ import { AddEditDeleteModal } from "../../add-edit-delete-modals.enum";
 
 import { useModalContext } from "../modal-context/ModalContext";
 import { AddEditAttachmentForm } from "../add-edit-attachment-form/AddEditAttachmentForm";
-import { FileAttachmentForm } from "../../interfaces/fileAttachmentForm";
 
-interface AddEditAttachmentModalProps {
-  onConfirm?: (data: FileAttachmentForm) => void;
-}
+interface AddEditAttachmentModalProps {}
 
-export const AddEditAttachmentModal: React.FC<AddEditAttachmentModalProps> = ({
-  onConfirm,
-}) => {
+export const AddEditAttachmentModal: React.FC<
+  AddEditAttachmentModalProps
+> = () => {
   const { deactivateModal, isActivatedModal, modalData, resetModalData } =
     useModalContext();
 
@@ -25,27 +22,17 @@ export const AddEditAttachmentModal: React.FC<AddEditAttachmentModalProps> = ({
     }, 300);
   };
 
-  const handleConfirm = (data: FileAttachmentForm) => {
-    onConfirm?.(data);
-    handleClose();
-  };
-
   const isEdit = modalData !== null;
   const title = !isEdit
     ? "Додати"
-    : `Редагувати "${modalData?.content ?? ""}"`.trim();
+    : `Редагувати "${modalData?.description ?? ""}"`.trim();
 
   return (
     <Modal
       open={isActivatedModal(AddEditDeleteModal.AddEdit)}
       onClose={handleClose}
       title={title}
-      content={
-        <AddEditAttachmentForm
-          currentAttachment={modalData}
-          onConfirm={handleConfirm}
-        />
-      }
+      content={<AddEditAttachmentForm currentAttachment={modalData} />}
     />
   );
 };

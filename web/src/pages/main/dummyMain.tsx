@@ -9,21 +9,23 @@ import { MainLayout } from "features/main-layout/MainLayout";
 import { StickyTabs } from "components/sticky-tabs/stickyTabs";
 
 import { tabApi } from "api/tab-api/tab.api";
+import { error } from "../../store/slices/snackbar.slice";
 
 export const DummyMain: React.FC = () => {
   const navigate = useNavigate();
 
   const [getTabs] = useHttpRequest(tabApi.getTabs);
-  const { tabs, firstTab } = useAppSelector(selectTabs);
+  const { firstTab } = useAppSelector(selectTabs);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await getTabs();
-      if (!tabs || tabs.length === 0) {
-        data && dispatch(updateTabs(data));
-      } else {
+      const { data, isOk, message } = await getTabs();
+      if (isOk) {
+        dispatch(updateTabs(data));
         navigate(`/${firstTab?.id ?? "first"}`);
+      } else {
+        dispatch(error({ message }));
       }
     };
     getData();

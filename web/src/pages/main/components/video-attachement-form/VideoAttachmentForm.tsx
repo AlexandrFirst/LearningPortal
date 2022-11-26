@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { AttachmentType } from "enums";
 import { FileUploadForm } from "../file-upload-form/FileUploadForm";
 import { LinkType } from "../../../../api/tab-api/tab.api.types";
+import { FileToUpload } from "../../interfaces/fileToUpload";
 
 interface VideoAttachmentFormProps {
-  file: File | null;
+  file: FileToUpload | null;
   onFileAdded?: (f: File | null) => void;
   onDelete?: () => void;
 }
@@ -17,11 +17,11 @@ export const VideoAttachmentForm: React.FC<VideoAttachmentFormProps> = ({
 }) => {
   return (
     <FileUploadForm
-      file={file}
+      fileToUpload={file}
       onFileAdded={onFileAdded}
       onDelete={onDelete}
       isLoading={false}
-      accept={"video"}
+      accept={"video/mp4,video/x-m4v,video/*"}
       currentType={LinkType.Video}
     />
   );

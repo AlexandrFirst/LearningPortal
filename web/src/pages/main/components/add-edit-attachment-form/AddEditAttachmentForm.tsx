@@ -1,10 +1,18 @@
 import React, { ChangeEvent, useState } from "react";
 import styles from "./addEditAttachmentForm.module.scss";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { FormWrapper } from "features/form-wrapper/formWrapper";
 import { CancelConfirmButtons } from "components/cancel-confirm-buttons/CancelConfirmButtons";
+
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { useHttpRequest } from "hooks/useHttpRequest";
+
+import { error, success } from "store/slices/snackbar.slice";
+
+import { ILink, LinkType } from "api/tab-api/tab.api.types";
+import { tabApi } from "api/tab-api/tab.api";
 
 import { AttachmentTypeRadio } from "../attachement-type-radio/AttachmentTypeRadio";
 import { LinkAttachmentForm } from "../link-attachment-form/LinkAttachmentForm";
@@ -12,40 +20,56 @@ import { PdfAttachmentForm } from "../pdf-attachment-form/PdfAttachmentForm";
 import { VideoAttachmentForm } from "../video-attachement-form/VideoAttachmentForm";
 import { useModalContext } from "../modal-context/ModalContext";
 
-import { ILink, LinkType } from "api/tab-api/tab.api.types";
 import { FileAttachmentForm } from "../../interfaces/fileAttachmentForm";
+import { FileToUpload } from "../../interfaces/fileToUpload";
+import { useParams } from "react-router-dom";
+import { updateTabs } from "../../../../store/slices/tab.slice";
+
+type DynamicTabParam = {
+  tabId: string;
+};
 
 interface AddEditAttachmentFormProps {
   currentAttachment?: ILink | null;
-  onConfirm: (data: FileAttachmentForm) => void;
 }
 
 export const AddEditAttachmentForm: React.FC<AddEditAttachmentFormProps> = ({
   currentAttachment,
-  onConfirm,
 }) => {
+  const [createLink, createLinkLoading] = useHttpRequest(tabApi.createLink);
+  const [updateTabsRequest, updateTabsLoading] = useHttpRequest(
+    tabApi.updateTabs
+  );
+  const [getTabs] = useHttpRequest(tabApi.getTabs);
+
+  const { tabId } = useParams<DynamicTabParam>();
+
+  const tabs = useAppSelector((state) => state.tabs.tabs);
+
   const { deactivateModal, resetModalData } = useModalContext();
 
-  const [file, setFile] = useState<File | null>(null);
+  const [fileToUpload, setFileToUpload] = useState<FileToUpload | null>(null);
   const [currentType, setCurrentType] = useState(
     currentAttachment?.contentType ?? LinkType.Pdf
   );
 
+  const dispatch = useAppDispatch();
+
   const methods = useForm<FileAttachmentForm>();
-  const { handleSubmit, setValue } = methods;
+  const { handleSubmit, control } = methods;
+  const fileLink = useWatch({ name: "fileLink", control });
 
   const handleFileAdded = (file: File | null) => {
-    setFile(file);
+    setFileToUpload({ type: currentType, file });
   };
 
-  const handleDelete = () => setFile(null);
+  const handleDelete = () => setFileToUpload(null);
 
   const handleChangeAttachmentType = (
     event: ChangeEvent<HTMLInputElement>,
     value: string
   ) => {
     setCurrentType(Number(value) as LinkType);
-    setValue("linkType", currentType);
   };
 
   const handleClose = () => {
@@ -55,12 +79,41 @@ export const AddEditAttachmentForm: React.FC<AddEditAttachmentFormProps> = ({
     }, 300);
   };
 
-  const handleConfirm = () => {
-    if (file) {
-      onConfirm({ fileLabel: file.name, file, linkType: currentType });
+  const handleConfirm = async (fileData: FileAttachmentForm) => {
+    const formData = new FormData();
+    formData.append(
+      "Description",
+      fileToUpload?.file ? fileToUpload.file?.name : fileData.fileLabel
+    );
+    formData.append("LinkType", currentType.toString());
+    !fileToUpload?.file && formData.append("Src", fileData.fileLink ?? "");
+    fileToUpload?.file && formData.append("FileToUpload", fileToUpload.file);
+
+    const {
+      isOk: isCreateLinkOk,
+      data,
+      message: createLinkMessage,
+    } = await createLink(formData);
+    if (!isCreateLinkOk) {
+      dispatch(error({ message: createLinkMessage }));
       return;
     }
-    return handleSubmit(onConfirm)();
+    const tabsToUpdate = tabs?.map((t) => ({
+      ...t,
+      links: t.links.map((l) => l.id),
+    }));
+    const curTab = tabsToUpdate?.find((t) => t.id === Number(tabId));
+    curTab?.links.push(data.id);
+    const { isOk: isUpdateTabOk, message: updateTabMessage } =
+      await updateTabsRequest({ tabs: tabsToUpdate ?? [] });
+    if (!isUpdateTabOk) {
+      dispatch(error({ message: updateTabMessage }));
+    } else {
+      dispatch(success({ message: "Дані були записані" }));
+      const { data: newTabs } = await getTabs();
+      dispatch(updateTabs(newTabs));
+      handleClose();
+    }
   };
 
   return (
@@ -72,22 +125,24 @@ export const AddEditAttachmentForm: React.FC<AddEditAttachmentFormProps> = ({
       {currentType === LinkType.Link && <LinkAttachmentForm />}
       {currentType === LinkType.Pdf && (
         <PdfAttachmentForm
-          file={file}
+          file={fileToUpload}
           onDelete={handleDelete}
           onFileAdded={handleFileAdded}
         />
       )}
       {currentType === LinkType.Video && (
         <VideoAttachmentForm
-          file={file}
+          file={fileToUpload}
           onDelete={handleDelete}
           onFileAdded={handleFileAdded}
         />
       )}
       <CancelConfirmButtons
+        loading={createLinkLoading || updateTabsLoading}
+        disabledConfirm={!fileLink && !fileToUpload}
         className={styles.btns}
         onCancel={handleClose}
-        onSubmit={handleConfirm}
+        onSubmit={handleSubmit(handleConfirm)}
       />
     </FormWrapper>
   );

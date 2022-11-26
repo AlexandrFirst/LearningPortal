@@ -5,6 +5,13 @@ export interface ITab {
   order: number;
 }
 
+export interface IUpdateTab {
+  id: number;
+  name: string;
+  links: number[];
+  order: number;
+}
+
 export enum LinkType {
   Link,
   Video,
@@ -22,5 +29,5 @@ export interface ILink {
 }
 
 export interface IUpdateTabsRequest {
-  tabs: ITab[];
+  tabs: IUpdateTab[];
 }

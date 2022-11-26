@@ -41,7 +41,7 @@ export const useHttpRequest = <TArgs, TRes>(
 
       return { data, isOk: true, message: "" };
     } catch (err: any) {
-      let message = err?.response?.data?.message;
+      let message = err?.response?.data?.message || err?.response?.statusText;
       if (err?.message === "Network Error") {
         message = "Помилка інтернет з`єднання";
       }

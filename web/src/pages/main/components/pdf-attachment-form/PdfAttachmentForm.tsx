@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { AttachmentType } from "enums";
-
-import { useHttpRequest } from "hooks/useHttpRequest";
 import { FileUploadForm } from "../file-upload-form/FileUploadForm";
 
 import { LinkType } from "api/tab-api/tab.api.types";
-import { tabApi } from "api/tab-api/tab.api";
+import { FileToUpload } from "../../interfaces/fileToUpload";
 
 interface PdfAttachmentFormProps {
-  file: File | null;
+  file: FileToUpload | null;
   onFileAdded?: (f: File | null) => void;
   onDelete?: () => void;
 }
@@ -21,7 +18,7 @@ export const PdfAttachmentForm: React.FC<PdfAttachmentFormProps> = ({
 }) => {
   return (
     <FileUploadForm
-      file={file}
+      fileToUpload={file}
       onFileAdded={onFileAdded}
       onDelete={onDelete}
       accept={"application/pdf"}

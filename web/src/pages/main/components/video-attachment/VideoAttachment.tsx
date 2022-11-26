@@ -14,8 +14,7 @@ interface VideoAttachmentProps {
 export const VideoAttachment: React.FC<VideoAttachmentProps> = ({
   attachment,
 }) => {
-  // const { link, label } = attachment
-  const { resourseId, content } = attachment;
+  const { content, description } = attachment;
   const { isMobile } = useMedia();
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -38,13 +37,13 @@ export const VideoAttachment: React.FC<VideoAttachmentProps> = ({
         linkClassName={styles.link}
         size={"lg"}
       >
-        {content || resourseId}
+        {description}
       </Link>
       <Modal
         open={isModalOpened}
         fullWidth={false}
         onClose={handleClose}
-        title={content ?? ""}
+        title={description}
         content={
           <video
             title={content}

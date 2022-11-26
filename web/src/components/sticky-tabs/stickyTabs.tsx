@@ -20,10 +20,12 @@ import { selectTabs, updateTabs } from "store/slices/tab.slice";
 import { tabApi } from "api/tab-api/tab.api";
 
 import { useAddNewTabModal } from "./useAddNewTabModal";
+import { error } from "../../store/slices/snackbar.slice";
 
 export const StickyTabs: React.FC = () => {
   const { tabs, firstTab } = useAppSelector(selectTabs);
   const { isAdmin } = useAuth();
+  console.log("===tabs===", tabs);
 
   const dispatch = useAppDispatch();
 
@@ -51,8 +53,8 @@ export const StickyTabs: React.FC = () => {
         order: t.order ?? 0,
       })),
     });
-    const { data } = await getTabs();
-    dispatch(updateTabs(data ?? []));
+    const { data, isOk, message } = await getTabs();
+    isOk ? dispatch(updateTabs(data ?? [])) : dispatch(error({ message }));
     handleCloseModal();
   };
 

@@ -3,7 +3,7 @@ import styles from "./linkAttachmentForm.module.scss";
 
 import { Grid } from "@mui/material";
 
-import { AttachmentType } from "enums";
+import { LinkType } from "api/tab-api/tab.api.types";
 import { Input } from "components/input/Input";
 
 import { useModalContext } from "../modal-context/ModalContext";
@@ -11,22 +11,22 @@ import { useModalContext } from "../modal-context/ModalContext";
 export const LinkAttachmentForm: React.FC = () => {
   const { modalData } = useModalContext();
 
-  const isTypeMatch = modalData?.type === AttachmentType.SimpleLink;
+  const isTypeMatch = modalData?.contentType === LinkType.Link;
 
   return (
     <Grid className={styles.container}>
       <Input
-        name={"linkLabel"}
+        name={"fileLabel"}
         variant={"standard"}
         placeholder={"Назва посилання"}
-        defaultValue={isTypeMatch ? modalData.label : undefined}
+        defaultValue={isTypeMatch ? modalData.description : undefined}
       />
       <Input
-        name={"linkLink"}
+        name={"fileLink"}
         variant={"standard"}
         placeholder={"Посилання (обов'язково)"}
         className={styles.linkInput}
-        defaultValue={isTypeMatch ? modalData.link : undefined}
+        defaultValue={isTypeMatch ? modalData.content : undefined}
         required
       />
     </Grid>

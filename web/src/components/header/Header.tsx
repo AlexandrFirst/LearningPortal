@@ -1,5 +1,6 @@
 import React from "react";
 
+import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +11,8 @@ import Typography from "@mui/material/Typography";
 import { Button, Container } from "@mui/material";
 
 import { AppRoute } from "routes";
+
+import { Language, LocalstorageKey } from "enums";
 
 import { useAppDispatch } from "hooks/redux";
 import { useAuth } from "hooks/useAuth";
@@ -22,6 +25,7 @@ import { Translate } from "./translate/Translate";
 export const Header: React.FC = () => {
   const navigate = useNavigate();
 
+  //TODO: understand why translation doesn't displays correctly but only the key
   const { t } = useTranslation("header");
 
   const { isAuth } = useAuth();
@@ -39,6 +43,11 @@ export const Header: React.FC = () => {
     navigate(`/${AppRoute.Login}`);
   };
 
+  const handleLangChanged = (lang: Language) => {
+    localStorage.setItem(LocalstorageKey.Lang, lang);
+    i18next.changeLanguage(lang);
+  };
+
   return (
     <AppBar position="static">
       <Container>
@@ -49,9 +58,9 @@ export const Header: React.FC = () => {
             onClick={handleLogoClick}
             sx={{ flexGrow: 1, cursor: "pointer" }}
           >
-            {t("title")}
+            ММС Портал
           </Typography>
-          <Translate />
+          <Translate onLangChanged={handleLangChanged} />
           {isAuth ? (
             <>
               <User onLogout={handleLogout} />
@@ -65,4 +74,4 @@ export const Header: React.FC = () => {
       </Container>
     </AppBar>
   );
-};
+};;

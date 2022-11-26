@@ -10,7 +10,7 @@ export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
     <Backdrop
       sx={{
         color: (theme) => theme.palette.secondary.main,
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        zIndex: (theme) => theme.zIndex.modal + 1,
       }}
       {...props}
     >

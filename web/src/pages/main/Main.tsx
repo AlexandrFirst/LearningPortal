@@ -3,6 +3,8 @@ import styles from "./main.module.scss";
 
 import { useParams } from "react-router-dom";
 
+import { ILink } from "api/tab-api/tab.api.types";
+
 import { useAppSelector } from "hooks/redux";
 import { useActivateModal } from "hooks/useActivateModal";
 import { useAuth } from "hooks/useAuth";
@@ -18,8 +20,6 @@ import { AddEditDeleteModal } from "./add-edit-delete-modals.enum";
 import { ModalContextProvider } from "./components/modal-context/ModalContext";
 import { AddEditAttachmentModal } from "./components/modal-add-edit-attachment/AddEditAttachmentModal";
 import { DeleteAttachmentModal } from "./components/modal-delete-attachment/DeleteAttachmentModal";
-import { ILink } from "api/tab-api/tab.api.types";
-import { FileAttachmentForm } from "./interfaces/fileAttachmentForm";
 
 type TabParam = {
   tabId: string;
@@ -44,12 +44,6 @@ export const Main: React.FC = () => {
     activateModal(AddEditDeleteModal.AddEdit);
   };
 
-  const handleConfirm = (data: FileAttachmentForm, e?: any) => {
-    console.log("===data===", data);
-    // const formData = new FormData();
-    // formData.append("src", "some link");
-  };
-
   return (
     <>
       <ModalContextProvider context={{ activateModal, ...modalContext }}>
@@ -63,7 +57,9 @@ export const Main: React.FC = () => {
             )}
           </Card>
         )}
-        <AddEditAttachmentModal onConfirm={handleConfirm} />
+        <AddEditAttachmentModal
+        // onConfirm={handleConfirm}
+        />
         <DeleteAttachmentModal />
       </ModalContextProvider>
     </>

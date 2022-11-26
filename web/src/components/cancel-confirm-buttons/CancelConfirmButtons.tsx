@@ -1,14 +1,19 @@
 import React, { ReactNode } from "react";
 import styles from "./cancelConfirmButtons.module.scss";
 
+import cn from "classnames";
+
 import { Grid } from "@mui/material";
 
 import { Button } from "../button/Button";
-import cn from "classnames";
+import { LoadingButton } from "../loading-button/LoadingButton";
 
 interface CancelConfirmButtonsProps {
   cancelBtn?: ReactNode;
   confirmBtn?: ReactNode;
+
+  disabledConfirm?: boolean;
+  loading?: boolean;
 
   onCancel?: () => void;
   onSubmit?: () => void;
@@ -22,6 +27,8 @@ export const CancelConfirmButtons: React.FC<CancelConfirmButtonsProps> = ({
   onCancel,
   onSubmit,
   className,
+  loading,
+  disabledConfirm,
 }) => {
   const cancel = cancelBtn ?? (
     <Button
@@ -33,7 +40,15 @@ export const CancelConfirmButtons: React.FC<CancelConfirmButtonsProps> = ({
     </Button>
   );
 
-  const confirm = confirmBtn ?? <Button onClick={onSubmit}>Зберегти</Button>;
+  const confirm = confirmBtn ?? (
+    <LoadingButton
+      loading={loading}
+      onClick={onSubmit}
+      disabled={disabledConfirm}
+    >
+      Зберегти
+    </LoadingButton>
+  );
 
   return (
     <Grid container alignItems="flex-end">

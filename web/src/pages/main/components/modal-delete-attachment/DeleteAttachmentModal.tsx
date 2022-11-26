@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IAttachment } from "interfaces";
+import { ILink } from "api/tab-api/tab.api.types";
 
 import { Modal } from "components/modal/Modal";
 import { CancelConfirmButtons } from "components/cancel-confirm-buttons/CancelConfirmButtons";
@@ -10,7 +10,7 @@ import { useModalContext } from "../modal-context/ModalContext";
 import { AddEditDeleteModal } from "../../add-edit-delete-modals.enum";
 
 interface DeleteAttachmentModalProps {
-  onDelete?: (attachment: IAttachment) => void;
+  onDelete?: (attachment: ILink) => void;
 }
 
 export const DeleteAttachmentModal: React.FC<DeleteAttachmentModalProps> = ({
@@ -35,7 +35,7 @@ export const DeleteAttachmentModal: React.FC<DeleteAttachmentModalProps> = ({
     <Modal
       open={isActivatedModal(AddEditDeleteModal.Delete)}
       onClose={handleClose}
-      title={`Ви впевнені, що хочете видалити "${modalData?.label}"`}
+      title={`Ви впевнені, що хочете видалити "${modalData?.description}"`}
       content={"Відновити дані більше не вдасться"}
       buttons={
         <CancelConfirmButtons

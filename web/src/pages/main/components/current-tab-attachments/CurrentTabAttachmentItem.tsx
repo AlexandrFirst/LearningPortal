@@ -22,7 +22,7 @@ export const CurrentTabAttachmentItem: React.FC<CurrentTabLinksItemProps> = ({
   link,
 }) => {
   // const { type, link, label } = attachment;
-  const { contentType, content, resourseId } = link;
+  const { contentType, content, description } = link;
   const { isAdmin } = useAuth();
 
   const { activateModal, saveModalData } = useModalContext();
@@ -32,11 +32,9 @@ export const CurrentTabAttachmentItem: React.FC<CurrentTabLinksItemProps> = ({
       case LinkType.Video:
         return <VideoAttachment attachment={link} />;
       case LinkType.Pdf:
-        return <PdfAttachment link={resourseId ?? ""} label={content} />;
+        return <PdfAttachment link={content} label={description} />;
       case LinkType.Link:
-        return (
-          <OuterLink label={content} link={resourseId ?? ""} size={"lg"} />
-        );
+        return <OuterLink label={description} link={content} size={"lg"} />;
       default:
         return "Didn't match";
     }
