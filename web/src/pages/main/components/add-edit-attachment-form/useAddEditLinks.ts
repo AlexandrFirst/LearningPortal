@@ -46,7 +46,7 @@ export const useAddEditLinks = ({
     const formData = new FormData();
     formData.append(
       LinkFormData.Description,
-      fileToUpload?.file ? fileToUpload.file?.name : fileData.fileLabel
+      fileToUpload?.file ? fileToUpload.file.name : fileData.fileLabel
     );
     formData.append(LinkFormData.LinkType, currentType.toString());
     !fileToUpload?.file &&

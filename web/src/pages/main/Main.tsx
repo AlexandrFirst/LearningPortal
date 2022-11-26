@@ -3,13 +3,18 @@ import styles from "./main.module.scss";
 
 import { useParams } from "react-router-dom";
 
-import { ILink } from "api/tab-api/tab.api.types";
+import { ILink, LinkType } from "api/tab-api/tab.api.types";
 
-import { useAppSelector } from "hooks/redux";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { useActivateModal } from "hooks/useActivateModal";
 import { useAuth } from "hooks/useAuth";
+import { useHttpRequest } from "hooks/useHttpRequest";
 
-import { selectTabs } from "store/slices/tab.slice";
+import { tabApi } from "api/tab-api/tab.api";
+
+import { selectTabs, updateTabs } from "store/slices/tab.slice";
+import { error, success } from "store/slices/snackbar.slice";
+
 import { CurrentTabAttachments } from "pages/main/components/current-tab-attachments/CurrentTabAttachments";
 
 import { Card } from "components/card/Card";
@@ -31,6 +36,11 @@ export const Main: React.FC = () => {
   const { tabs } = useAppSelector(selectTabs);
   const { isAdmin } = useAuth();
 
+  const dispatch = useAppDispatch();
+
+  const [deleteLink, deleteLoading] = useHttpRequest(tabApi.deleteLink);
+  const [getTabs] = useHttpRequest(tabApi.getTabs);
+
   const { activateModal, ...modalContext } = useActivateModal<
     AddEditDeleteModal,
     ILink
@@ -45,6 +55,34 @@ export const Main: React.FC = () => {
     activateModal(AddEditDeleteModal.AddEdit);
   };
 
+  const getLinkLabel = (linkType: LinkType) => {
+    switch (linkType) {
+      case LinkType.Link:
+        return "Посилання";
+      case LinkType.Pdf:
+        return "Файл";
+      case LinkType.Video:
+        return "Відео";
+      default:
+        return "Посилання";
+    }
+  };
+
+  const handleDelete = async (link: ILink) => {
+    const { isOk, message } = await deleteLink(link.id);
+    const linklabel = getLinkLabel(link.contentType);
+    if (!isOk) {
+      dispatch(error({ message }));
+    } else {
+      dispatch(success({ message: `${linklabel} успішно видалено` }));
+      const { isOk: isGetOk, message, data } = await getTabs();
+      if (!isGetOk) {
+        dispatch(error({ message }));
+      } else {
+        dispatch(updateTabs(data));
+      }
+    }
+  };
   return (
     <>
       <ModalContextProvider context={{ activateModal, ...modalContext }}>
@@ -61,7 +99,10 @@ export const Main: React.FC = () => {
           <EmptyState />
         )}
         <AddEditAttachmentModal />
-        <DeleteAttachmentModal />
+        <DeleteAttachmentModal
+          loading={deleteLoading}
+          onDelete={handleDelete}
+        />
       </ModalContextProvider>
     </>
   );

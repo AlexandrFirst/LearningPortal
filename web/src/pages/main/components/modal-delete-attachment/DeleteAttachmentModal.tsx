@@ -4,17 +4,19 @@ import { ILink } from "api/tab-api/tab.api.types";
 
 import { Modal } from "components/modal/Modal";
 import { CancelConfirmButtons } from "components/cancel-confirm-buttons/CancelConfirmButtons";
-import { Button } from "components/button/Button";
+import { LoadingButton } from "components/loading-button/LoadingButton";
 
 import { useModalContext } from "../modal-context/ModalContext";
 import { AddEditDeleteModal } from "../../add-edit-delete-modals.enum";
 
 interface DeleteAttachmentModalProps {
   onDelete?: (attachment: ILink) => void;
+  loading?: boolean;
 }
 
 export const DeleteAttachmentModal: React.FC<DeleteAttachmentModalProps> = ({
   onDelete,
+  loading,
 }) => {
   const { deactivateModal, isActivatedModal, modalData, resetModalData } =
     useModalContext();
@@ -41,9 +43,13 @@ export const DeleteAttachmentModal: React.FC<DeleteAttachmentModalProps> = ({
         <CancelConfirmButtons
           onCancel={handleClose}
           confirmBtn={
-            <Button color={"error"} onClick={handleDelete}>
+            <LoadingButton
+              loading={loading}
+              color={"error"}
+              onClick={handleDelete}
+            >
               Видалити
-            </Button>
+            </LoadingButton>
           }
         />
       }

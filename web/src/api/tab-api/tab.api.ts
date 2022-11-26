@@ -18,7 +18,7 @@ class TabApi {
     return Put(`link/updateLink/${req.id}`, req.formData);
   }
 
-  deleteLink(id: string) {
+  deleteLink(id: number) {
     return Delete(`link/deletelink/${id}`);
   }
 }
