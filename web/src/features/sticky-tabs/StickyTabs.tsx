@@ -91,6 +91,13 @@ export const StickyTabs: React.FC = () => {
         ) : (
           <Tab label={"Пасхалочка"} value={`/undefined`} />
         )}
+        <Tab
+          id={`/${AppRoute.Tests}`}
+          value={`/${AppRoute.Tests}`}
+          label={"Тести"}
+          component={Link}
+          to={`/${AppRoute.Tests}`}
+        />
         {isAdmin && (
           <Tab
             id={`/${AppRoute.AddTab}`}

@@ -6,7 +6,6 @@ import { useHttpRequest } from "hooks/useHttpRequest";
 
 import { selectTabs, updateTabs } from "store/slices/tab.slice";
 import { MainLayout } from "features/main-layout/MainLayout";
-import { StickyTabs } from "components/sticky-tabs/stickyTabs";
 
 import { tabApi } from "api/tab-api/tab.api";
 import { error } from "../../store/slices/snackbar.slice";
@@ -35,7 +34,6 @@ export const DummyMain: React.FC = () => {
 
   return (
     <MainLayout>
-      <StickyTabs />
       <Outlet />
     </MainLayout>
   );
