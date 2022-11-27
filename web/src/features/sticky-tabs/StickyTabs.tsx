@@ -16,11 +16,11 @@ import { useHttpRequest } from "hooks/useHttpRequest";
 import { useAuth } from "hooks/useAuth";
 
 import { selectTabs, updateTabs } from "store/slices/tab.slice";
+import { error } from "store/slices/snackbar.slice";
 
 import { tabApi } from "api/tab-api/tab.api";
 
 import { useAddNewTabModal } from "./useAddNewTabModal";
-import { error } from "../../store/slices/snackbar.slice";
 
 export const StickyTabs: React.FC = () => {
   const { tabs, firstTab } = useAppSelector(selectTabs);
@@ -60,6 +60,7 @@ export const StickyTabs: React.FC = () => {
   };
 
   useEffect(() => {
+    //TODO: need to be updated in case we change path to main page
     setCurrentTab(pathname);
   }, [pathname]);
 
@@ -90,6 +91,13 @@ export const StickyTabs: React.FC = () => {
         ) : (
           <Tab label={"Пасхалочка"} value={`/undefined`} />
         )}
+        <Tab
+          id={`/${AppRoute.Tests}`}
+          value={`/${AppRoute.Tests}`}
+          label={"Тести"}
+          component={Link}
+          to={`/${AppRoute.Tests}`}
+        />
         {isAdmin && (
           <Tab
             id={`/${AppRoute.AddTab}`}

@@ -6,6 +6,7 @@ import { Link } from "components/link/Link";
 import { useMedia } from "hooks/useMedia";
 
 import { ILink } from "api/tab-api/tab.api.types";
+import { OuterLink } from "../../../../components/outer-link/OuterLink";
 
 interface VideoAttachmentProps {
   attachment: ILink;
@@ -29,16 +30,23 @@ export const VideoAttachment: React.FC<VideoAttachmentProps> = ({
   const width = isMobile ? 240 : 540;
   const height = isMobile ? 180 : 320;
 
+  //TODO: check why video does not appears if we try to show it in <video> tag
+  const isOpenModalToShowVideo = false;
+
   return (
     <>
-      <Link
-        to={"#"}
-        onClick={handleClick}
-        linkClassName={styles.link}
-        size={"lg"}
-      >
-        {description}
-      </Link>
+      {isOpenModalToShowVideo ? (
+        <Link
+          to={"#"}
+          onClick={handleClick}
+          linkClassName={styles.link}
+          size={"lg"}
+        >
+          {description}
+        </Link>
+      ) : (
+        <OuterLink link={content} label={description} size={"lg"} />
+      )}
       <Modal
         open={isModalOpened}
         fullWidth={false}

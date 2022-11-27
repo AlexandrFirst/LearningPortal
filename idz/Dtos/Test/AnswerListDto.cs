@@ -5,7 +5,7 @@ namespace idz.Dtos.Test
     public class AnswerListItem
     {
         public int QuestionId { get; set; }
-        public string Answear { get; set; }
+        public string Answear { get; set; } // ”бирать зап€тые, добавл€ть все ответы через зап€тую
     }
 
     public class AnswerListDto
