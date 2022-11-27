@@ -9,7 +9,7 @@
       "applicationUrl": "http://localhost:5044",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ENABLE_CORS": true
+        "ENABLE_CORS": "true"
       }
     }
   }

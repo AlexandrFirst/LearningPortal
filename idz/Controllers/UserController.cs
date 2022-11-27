@@ -87,6 +87,7 @@ namespace idz.Controllers
                 new Claim(ClaimTypes.Surname, dbUser.Surname),
                 new Claim(ClaimTypes.Role, dbUser.UserRole.ToString()),
                 new Claim(ClaimTypes.Email, dbUser.Email),
+                new Claim("UserId", dbUser.Id.ToString())
             }, "Cookies");
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -115,12 +116,12 @@ namespace idz.Controllers
             try
             {
                 var userToRegister = mapper.Map<User>(userRegisterDto);
-                var isMailvalid = checkMailAndDomain(userToRegister.Email);
+                var isMailvalid = true;
+                //checkMailAndDomain(userToRegister.Email);
                 if (isMailvalid)
                 {
                     Guid confirmToken = Guid.NewGuid();
-
-                    string messageToSend = $"<a href='http://localhost:3000/activate/{confirmToken.ToString()}>Click here to activate</a>";
+                    string messageToSend = $"<a href='http://localhost:3000/activate/{confirmToken.ToString()}'>Click to confirm</a>";
                     await emailService.SendEmailAsync(new Dtos.Mail.MailRequest()
                     {
                         Body = messageToSend,

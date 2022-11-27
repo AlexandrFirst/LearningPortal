@@ -24,7 +24,6 @@ namespace idz.Services
             email.Sender = MailboxAddress.Parse(emailOption.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.Subject = mailRequest.Subject;
-            
             var builder = new BodyBuilder();
 
             builder.HtmlBody = mailRequest.Body;
