@@ -153,6 +153,7 @@ namespace idz.Controllers
             }
             var testsToReturn = await context.Tests.Skip(page - 1).Take(pageSize).Select(x => new { 
                 Name = x.Name,
+                TestId = x.Id,
                 TabName = x.Tab.Name,
                 TabId = x.Tab.Id,
                 Threshold = x.LowThreshold
