@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace idz.Controllers
 {
-    [Authorize]
+    [Route("[controller]")]
     [ApiController]
     public class TestController : ControllerBase
     {
@@ -96,8 +96,8 @@ namespace idz.Controllers
                     throw new System.Exception("Take test again please");
                 }
 
-                var realAnswers = trueAnswer.AnswearsList.ToLower().Split(',');
-                var inputAnswers = testAnswers.Answears[i].Answear.ToLower().Split(',');
+                var realAnswers = trueAnswer.AnswearsList.ToLower().Split('|');
+                var inputAnswers = testAnswers.Answears[i].Answear.ToLower().Split('|');
                 Array.Sort(realAnswers);
                 Array.Sort(inputAnswers);
 
@@ -139,6 +139,34 @@ namespace idz.Controllers
             await context.SaveChangesAsync();
 
             return Ok(new { Message = "Test is passed" });
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllTest(int page, int pageSize) 
+        {
+            if (page <= 0) { 
+                page = 1;
+            }
+
+            if (pageSize <= 0) {
+                pageSize = 10;
+            }
+            var testsToReturn = await context.Tests.Skip(page - 1).Take(pageSize).Select(x => new { 
+                Name = x.Name,
+                TabName = x.Tab.Name,
+                TabId = x.Tab.Id,
+                Threshold = x.LowThreshold
+            }).ToListAsync();
+
+            return Ok(testsToReturn);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTestById(int id) 
+        {
+            var testToReturn = await context.Tests.FirstOrDefaultAsync(t => t.Id == id);
+            var testOutput = mapper.Map<TestOutputDto>(testToReturn);
+            return Ok(testOutput);
         }
 
         private async Task<Test> AddTestToDb(TestInputDto newTestInfo)
