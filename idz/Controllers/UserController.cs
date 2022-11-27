@@ -120,9 +120,10 @@ namespace idz.Controllers
                 {
                     Guid confirmToken = Guid.NewGuid();
 
+                    string messageToSend = $"<a href='http://localhost:3000/activate/{confirmToken.ToString()}>Click here to activate</a>";
                     await emailService.SendEmailAsync(new Dtos.Mail.MailRequest()
                     {
-                        Body = $"<p>{confirmToken.ToString()}</p>",
+                        Body = messageToSend,
                         Subject = "Mail confirmation",
                         ToEmail = userToRegister.Email,
                     });

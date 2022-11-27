@@ -14,7 +14,9 @@ import { error } from "../../store/slices/snackbar.slice";
 export const DummyMain: React.FC = () => {
   const navigate = useNavigate();
 
-  const [getTabs] = useHttpRequest(tabApi.getTabs);
+  const [getTabs] = useHttpRequest(tabApi.getTabs, {
+    withLoadingIndicator: true,
+  });
   const { firstTab } = useAppSelector(selectTabs);
   const dispatch = useAppDispatch();
 

@@ -7,6 +7,7 @@ import { DummyMain } from "pages/main/dummyMain";
 import { Main } from "pages/main/Main";
 import { Login } from "pages/login/Login";
 import { Register } from "pages/register/Register";
+import { ActivateUser } from "../../pages/activateUser/ActivateUser";
 
 export const AppRouter: React.FC = () => {
   return (
@@ -17,6 +18,11 @@ export const AppRouter: React.FC = () => {
 
       <Route path={`/${AppRoute.Login}`} element={<Login />} />
       <Route path={`/${AppRoute.Register}`} element={<Register />} />
+      <Route
+        path={`/${AppRoute.Activate}/${AppRoute.DynamicToken}`}
+        element={<ActivateUser />}
+      />
     </Routes>
   );
 };
+//localhost:3000/activate/huiwh-ughwr-2fiew

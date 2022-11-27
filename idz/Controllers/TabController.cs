@@ -70,7 +70,7 @@ namespace idz.Controllers
                     link.IsUsed = true;
                 }
                 tab.Links.AddRange(linksToAdd);
-
+                tab.Name = updateTabDto.Tabs.First(x => x.Id == tab.Id).Name;
             }
 
             context.Tabs.RemoveRange(tabsToRemove);

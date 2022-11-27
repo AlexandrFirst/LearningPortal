@@ -21,7 +21,8 @@ export const PdfAttachmentForm: React.FC<PdfAttachmentFormProps> = ({
       fileToUpload={file}
       onFileAdded={onFileAdded}
       onDelete={onDelete}
-      accept={"application/pdf"}
+      // accept={"application/pdf"}
+      accept={"*"}
       currentType={LinkType.Pdf}
       isLoading={false}
     />

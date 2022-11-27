@@ -25,9 +25,11 @@ export const Form: React.FC = () => {
   const { handleSubmit } = methods;
 
   const handleRegister = async (registerData: IRegister) => {
-    const { isOk, data, message } = await register(registerData);
+    const { isOk, message } = await register(registerData);
     if (isOk) {
-      dispatch(success({ message: data.message }));
+      dispatch(
+        success({ message: "На Вашу пошту було надіслано повідомлення" })
+      );
     } else {
       dispatch(error({ message }));
     }

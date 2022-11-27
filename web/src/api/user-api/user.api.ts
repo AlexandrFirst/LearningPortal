@@ -14,9 +14,8 @@ class UserApi {
   logout() {
     return Post(`user/logout`);
   }
-
-  confirm() {
-    return Get(`user/confirm,`);
+  confirm(token: string) {
+    return Get(`user/confirm?confirmationToken=${token}`, {});
   }
 }
 
