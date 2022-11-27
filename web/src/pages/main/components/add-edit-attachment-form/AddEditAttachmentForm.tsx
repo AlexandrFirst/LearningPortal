@@ -55,7 +55,7 @@ export const AddEditAttachmentForm: React.FC<AddEditAttachmentFormProps> = ({
     setFileToUpload({ type: currentType, file });
   };
 
-  const handleDelete = () => setFileToUpload(null);
+  const handleDeleteFile = () => setFileToUpload(null);
 
   const handleChangeAttachmentType = (
     event: ChangeEvent<HTMLInputElement>,
@@ -85,14 +85,14 @@ export const AddEditAttachmentForm: React.FC<AddEditAttachmentFormProps> = ({
       {currentType === LinkType.Pdf && (
         <PdfAttachmentForm
           file={fileToUpload}
-          onDelete={handleDelete}
+          onDelete={handleDeleteFile}
           onFileAdded={handleFileAdded}
         />
       )}
       {currentType === LinkType.Video && (
         <VideoAttachmentForm
           file={fileToUpload}
-          onDelete={handleDelete}
+          onDelete={handleDeleteFile}
           onFileAdded={handleFileAdded}
         />
       )}
