@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 
 import { AppRoute } from "routes";
 
+import { useAuth } from "hooks/useAuth";
+
 import { DummyMain } from "pages/main/dummyMain";
 import { Main } from "pages/main/Main";
 import { Login } from "pages/login/Login";
@@ -12,6 +14,8 @@ import { Tests } from "pages/tests/Tests";
 import { CreateTest } from "pages/create-test/CreateTest";
 
 export const AppRouter: React.FC = () => {
+  const { isAdmin } = useAuth();
+
   return (
     <Routes>
       <Route path={AppRoute.Main} element={<DummyMain />}>
@@ -19,10 +23,12 @@ export const AppRouter: React.FC = () => {
       </Route>
 
       <Route path={`/${AppRoute.Tests}`} element={<Tests />} />
-      <Route
-        path={`/${AppRoute.Tests}/${AppRoute.CreateTest}`}
-        element={<CreateTest />}
-      />
+      {isAdmin && (
+        <Route
+          path={`/${AppRoute.Tests}/${AppRoute.CreateTest}`}
+          element={<CreateTest />}
+        />
+      )}
       <Route path={`/${AppRoute.Login}`} element={<Login />} />
       <Route path={`/${AppRoute.Register}`} element={<Register />} />
       <Route

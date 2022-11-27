@@ -1,28 +1,23 @@
 import React, { ReactElement } from "react";
 import { Grid, ListItem, Typography } from "@mui/material";
 
-type CorrectAnswersSectionProps = {
+type AnswersSectionProps = {
   title: string;
   list?: string[];
   renderInput: (item: string, index: number) => ReactElement;
 };
 
-export const CorrectAnswersSection: React.FC<CorrectAnswersSectionProps> = ({
+export const AnswersSection: React.FC<AnswersSectionProps> = ({
   title,
-  item,
+  renderInput,
   list,
 }) => {
   return (
     <ListItem sx={{ display: "block" }}>
       <Typography variant={"body1"}>{title}</Typography>
       {list?.map((answer, index) => (
-        <Grid item>
-          {item}
-          {/*<Input*/}
-          {/*  name={""}*/}
-          {/*  label={"Правильна відповідь"}*/}
-          {/*  defaultValue={answer}*/}
-          {/*/>*/}
+        <Grid key={answer} item>
+          {renderInput(answer, index)}
         </Grid>
       ))}
     </ListItem>
