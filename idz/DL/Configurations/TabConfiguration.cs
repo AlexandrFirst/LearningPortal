@@ -10,7 +10,7 @@ namespace idz.DL.Configurations
         {
             builder.HasMany(x => x.Links).WithOne(x => x.Tab).OnDelete(DeleteBehavior.Cascade);
             builder.HasIndex(x => x.Name).IsUnique();
-            builder.HasMany(x => x.Tests).WithOne(x => x.Tab).OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(x => x.Tests).WithOne(x => x.Tab).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
