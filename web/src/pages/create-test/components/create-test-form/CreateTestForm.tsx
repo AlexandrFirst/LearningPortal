@@ -1,7 +1,7 @@
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
-import { List, ListItem } from "@mui/material";
+import { Grid, List, ListItem } from "@mui/material";
 
 import { Input } from "components/input/Input";
 import { Button } from "components/button/Button";
@@ -17,9 +17,9 @@ export const CreateTestForm: React.FC = () => {
       questions: [{ content: "", answearsList: [""], possibleAnswears: [""] }],
     },
   });
-  const { control } = methods;
+  const { control, handleSubmit } = methods;
 
-  const { fields, append, update } = useFieldArray({
+  const { fields, append, update, remove } = useFieldArray({
     control,
     name: "questions",
   });
@@ -28,8 +28,52 @@ export const CreateTestForm: React.FC = () => {
     append({ content: "", answearsList: [""], possibleAnswears: [""] });
   };
 
-  const handleUpdate = () => {
-    update(0, { content: fields[1].content, answearsList: ["eufhriuwgh"] });
+  const addCorrectAnswer = (lastIndex: number) => {
+    update(lastIndex, {
+      content: fields[lastIndex].content,
+      possibleAnswears: fields[lastIndex].possibleAnswears,
+      answearsList: [...(fields[lastIndex].answearsList ?? []), ""],
+    });
+  };
+
+  const addInCorrectAnswer = (lastIndex: number) => {
+    update(lastIndex, {
+      content: fields[lastIndex].content,
+      answearsList: fields[lastIndex].answearsList,
+      possibleAnswears: [...(fields[lastIndex].possibleAnswears ?? []), ""],
+    });
+  };
+
+  const getNewArr = (innerIndex: number, arr?: string[]) => {
+    const newArrStart = arr?.slice(0, innerIndex) ?? [];
+    const newArrFinish = arr?.slice(innerIndex + 1) ?? [];
+    return [...newArrStart, ...newArrFinish];
+  };
+
+  const deleteInCorrect = (index: number, innerIndex: number) => {
+    const possibleAnswers = fields[index]?.possibleAnswears;
+    update(index, {
+      content: fields[index].content,
+      answearsList: fields[index].answearsList,
+      possibleAnswears: getNewArr(innerIndex, possibleAnswers),
+    });
+  };
+
+  const deleteCorrect = (index: number, innerIndex: number) => {
+    const answearList = fields[index]?.answearsList;
+    update(index, {
+      content: fields[index].content,
+      possibleAnswears: fields[index].possibleAnswears,
+      answearsList: getNewArr(innerIndex, answearList),
+    });
+  };
+
+  const handleDeleteQuetion = (index: number) => {
+    remove(index);
+  };
+
+  const handleConfirm = (testFormData: ICreateTestForm) => {
+    console.log("===testFormData===", testFormData);
   };
 
   return (
@@ -38,14 +82,24 @@ export const CreateTestForm: React.FC = () => {
       <List>
         {fields.map(({ id, ...item }, index) => (
           <ListItem key={id} sx={{ display: "block" }}>
-            <Question index={index} update={update} {...item} />
+            <Question
+              {...item}
+              index={index}
+              addInCorrectAnswer={addInCorrectAnswer}
+              addCorrectAnswer={addCorrectAnswer}
+              deleteCorrect={deleteCorrect}
+              deleteInCorrect={deleteInCorrect}
+              onDeleteQuestion={handleDeleteQuetion}
+            />
           </ListItem>
         ))}
       </List>
-      <Button variant={"text"} onClick={handleAddQuestion}>
-        +Додати питання
-      </Button>
-      <Button onClick={handleUpdate}>Test update</Button>
+      <Grid container justifyContent={"space-between"} sx={{ mt: 3 }}>
+        <Button variant={"text"} onClick={handleAddQuestion}>
+          +Додати питання
+        </Button>
+        <Button onClick={handleSubmit(handleConfirm)}>Створити тест</Button>
+      </Grid>
     </FormWrapper>
   );
 };

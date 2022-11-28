@@ -1,6 +1,7 @@
-import { Delete, Post, Put } from "../config";
+import { Delete, Get, Post, Put } from "../config";
 import {
   CreateTestRequest,
+  GetAllTestRequests,
   IAnswerList,
   ITest,
   ProccessAnswersResponse,
@@ -8,6 +9,14 @@ import {
 } from "./test.api.types";
 
 class TestApi {
+  getAll({ page, pageSize }: GetAllTestRequests) {
+    return Get("test/all", { params: { page, pageSize } });
+  }
+
+  getById(id: number) {
+    return Get(`test/${id}`);
+  }
+
   createTest({ test, tabId }: CreateTestRequest): Promise<ITest> {
     return Post(`test/create/${tabId}`, test);
   }

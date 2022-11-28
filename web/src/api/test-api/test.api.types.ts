@@ -27,6 +27,11 @@ export interface IAnswerList {
   answears: AnswerListItem[];
 }
 
+export interface GetAllTestRequests {
+  page: number;
+  pageSize: number;
+}
+
 export interface CreateTestRequest {
   test: ITest;
   tabId: number;

@@ -1,29 +1,23 @@
-import React, { Fragment } from "react";
-import {
-  DeepPartial,
-  FieldArray,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
+import React from "react";
+import styles from "./question.module.scss";
 
-import { Grid, List, ListItem } from "@mui/material";
+import { Grid, IconButton, List } from "@mui/material";
 
 import { Card } from "components/card/Card";
 import { Input } from "components/input/Input";
 
-import {
-  IQuestionPartialAnswers,
-  questionListName,
-  ReactHookFormUpdate,
-} from "../../interfaces";
-
-import { AnswersSection } from "../correct-answers-section/AnswersSection";
-import { Answer } from "../answer/Answer";
+import { IQuestionPartialAnswers, questionListName } from "../../interfaces";
+import { CorrectAnswers } from "../correct-answers/CorrectAnswers";
+import { IncorrectAnswers } from "../incorrect-answers/IncorrectAnswers";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface QuestionProps extends IQuestionPartialAnswers {
   index: number;
-  update: ReactHookFormUpdate;
-  control: Control<ICreateTestForm, any>;
+  addCorrectAnswer: (index: number) => void;
+  addInCorrectAnswer: (index: number) => void;
+  deleteInCorrect: (index: number, innerIndex: number) => void;
+  deleteCorrect: (index: number, innerIndex: number) => void;
+  onDeleteQuestion?: (index: number) => void;
 }
 
 export const Question: React.FC<QuestionProps> = ({
@@ -31,47 +25,43 @@ export const Question: React.FC<QuestionProps> = ({
   content,
   possibleAnswears,
   answearsList,
-  update,
+  addCorrectAnswer,
+  addInCorrectAnswer,
+  deleteCorrect,
+  deleteInCorrect,
+  onDeleteQuestion,
 }) => {
-  const {} = use;
   return (
-    <Card>
-      <Input
-        label={"Питання"}
-        name={`${questionListName}.${index}.content`}
-        defaultValue={content}
-      />
+    <Card elevation={2}>
+      <Grid container alignItems={"flex-end"}>
+        <Grid item xs={11}>
+          <Input
+            label={"Питання"}
+            name={`${questionListName}.${index}.content`}
+            defaultValue={content}
+          />
+        </Grid>
+        <IconButton
+          className={styles.delete_icon}
+          onClick={() => onDeleteQuestion?.(index)}
+        >
+          <DeleteIcon color={"error"} fontSize={"large"} />
+        </IconButton>
+      </Grid>
       <List sx={{ display: "flex", justifyContent: "space-between" }}>
-        <AnswersSection
-          title={"Правильні відповіді"}
-          list={answearsList}
-          renderInput={(answer, innerIndex) => (
-            <Answer
-              answer={answer}
-              index={index}
-              innerIndex={innerIndex}
-              label={"Правильна відповідь"}
-            />
-          )}
-        />
-        <AnswersSection
-          title={"Неправильні відповіді"}
-          list={possibleAnswears}
-          renderInput={(answer, innerIndex) => (
-            <Answer
-              answer={answer}
-              index={index}
-              innerIndex={innerIndex}
-              label={"Неправильна відповідь"}
-            />
-          )}
+        <CorrectAnswers
+          addCorrectAnswer={addCorrectAnswer}
+          answearsList={answearsList}
+          index={index}
+          deleteCorrect={deleteCorrect}
         />
 
-        {/*{fields.map(({ id, answearsList, possibleAnswears }) => (*/}
-        {/*  <Fragment key={id}>*/}
-        {/*    */}
-        {/*  </Fragment>*/}
-        {/*))}*/}
+        <IncorrectAnswers
+          addInCorrectAnswer={addInCorrectAnswer}
+          possibleAnswears={possibleAnswears}
+          index={index}
+          deleteInCorrect={deleteInCorrect}
+        />
       </List>
     </Card>
   );
