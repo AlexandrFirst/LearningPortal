@@ -4,6 +4,7 @@ import { HttpRequestConfig } from "interfaces";
 import { useAppDispatch } from "./redux";
 
 import { hideLoading, showLoading } from "store/slices/loading-indicator.slice";
+import { useSnackbar } from "./useSnackbar";
 
 type MethodReturnType<TRes> = { data: TRes; isOk: boolean; message: string };
 
@@ -12,6 +13,7 @@ const defaultHttpRequestConfig: HttpRequestConfig<any> = {
   shouldShowLoading: true,
   withThrowErr: false,
   withLoadingIndicator: false,
+  withSnackErr: true,
 };
 
 export const useHttpRequest = <TArgs = any, TRes = any>(
@@ -23,6 +25,7 @@ export const useHttpRequest = <TArgs = any, TRes = any>(
   string | null
 ] => {
   const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -47,6 +50,7 @@ export const useHttpRequest = <TArgs = any, TRes = any>(
       }
       console.error(err);
       setErrorMessage(message);
+      config.withSnackErr && snackbar.error(message);
       return { data: err, isOk: false, message };
     } finally {
       config.shouldShowLoading && setIsLoading(false);

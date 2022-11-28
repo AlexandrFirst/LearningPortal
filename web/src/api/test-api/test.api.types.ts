@@ -7,6 +7,14 @@ export interface ITest {
   questions: IQuestionInput[];
 }
 
+export interface ITestWithTab {
+  name: string;
+  testId: number;
+  tabName: string;
+  tabId: number;
+  threshold: number;
+}
+
 export interface IQuestionInput {
   content: string;
   answearsList: string[];
