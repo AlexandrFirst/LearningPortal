@@ -10,12 +10,14 @@ interface FormWrapperProps<T extends FieldValues> extends PropsWithChildren {
   methods: UseFormReturn<T>;
   onSubmit?: (data: T) => void;
   onError?: SubmitErrorHandler<T>;
+  className?: string;
 }
 
 export function FormWrapper<T extends FieldValues>({
   methods,
   onSubmit,
   onError,
+  className,
   children,
 }: FormWrapperProps<T>) {
   const { handleSubmit } = methods;
@@ -26,8 +28,9 @@ export function FormWrapper<T extends FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      {/*TODO: it worked on previous versions of react, don't know the exact reason*/}
-      <form onSubmit={handleSubmit(submit, onError)}>{children}</form>
+      <form onSubmit={handleSubmit(submit, onError)} className={className}>
+        {children}
+      </form>
     </FormProvider>
   );
 }

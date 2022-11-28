@@ -1,11 +1,12 @@
 import { IQuestionInput } from "api/test-api/test.api.types";
 
 export type IQuestionPartialAnswers = Pick<IQuestionInput, "content"> &
-    Partial<Pick<IQuestionInput, "possibleAnswears" | "answearsList">>;
+  Partial<Pick<IQuestionInput, "possibleAnswears" | "answearsList">>;
 
 export interface ICreateTestForm {
   testName: string;
   questions: IQuestionPartialAnswers[];
+  tabId: number;
 }
 
 export const questionListName = "questions"; //Need to be the same as ICreateTestForm.questions
