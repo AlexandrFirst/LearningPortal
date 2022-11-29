@@ -13,7 +13,9 @@ import { CurrentTestParams } from "./types";
 
 export const CurrentTest: React.FC = () => {
   const { testId } = useParams<CurrentTestParams>();
-  const [getById] = useHttpRequest(testApi.getById);
+  const [getById] = useHttpRequest(testApi.getById, {
+    withLoadingIndicator: true,
+  });
 
   useEffect(() => {
     const getData = async () => {

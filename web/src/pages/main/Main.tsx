@@ -13,7 +13,7 @@ import { useHttpRequest } from "hooks/useHttpRequest";
 import { tabApi } from "api/tab-api/tab.api";
 
 import { selectTabs, updateTabs } from "store/slices/tab.slice";
-import { error, success } from "store/slices/snackbar.slice";
+import { success } from "store/slices/snackbar.slice";
 
 import { CurrentTabAttachments } from "pages/main/components/current-tab-attachments/CurrentTabAttachments";
 
@@ -69,16 +69,12 @@ export const Main: React.FC = () => {
   };
 
   const handleDelete = async (link: ILink) => {
-    const { isOk, message } = await deleteLink(link.id);
+    const { isOk } = await deleteLink(link.id);
     const linklabel = getLinkLabel(link.contentType);
-    if (!isOk) {
-      dispatch(error({ message }));
-    } else {
+    if (isOk) {
       dispatch(success({ message: `${linklabel} успішно видалено` }));
-      const { isOk: isGetOk, message, data } = await getTabs();
-      if (!isGetOk) {
-        dispatch(error({ message }));
-      } else {
+      const { isOk: isGetOk, data } = await getTabs();
+      if (isGetOk) {
         dispatch(updateTabs(data));
       }
     }
