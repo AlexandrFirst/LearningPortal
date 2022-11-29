@@ -14,7 +14,7 @@ class TestApi {
     return Get("test/all", { params: { page, pageSize } });
   }
 
-  getById(id: number): Promise<ITest> {
+  getById(id: number | string): Promise<ITest> {
     return Get(`test/${id}`);
   }
 

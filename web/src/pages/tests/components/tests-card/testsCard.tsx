@@ -23,7 +23,7 @@ export const TestsCard: React.FC = () => {
     <Card className={styles.card}>
       <List>
         {currentTabTests.map(({ testId, name }, index) => (
-          <ListItem>
+          <ListItem key={testId}>
             <Link to={`/${AppRoute.Tests}/${testId}`} size={"lg"}>
               {index + 1}. {name}
             </Link>

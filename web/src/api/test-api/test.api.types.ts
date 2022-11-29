@@ -16,6 +16,7 @@ export interface ITestWithTab {
 }
 
 export interface IQuestionInput {
+  id: number;
   content: string;
   answearsList: string[];
   possibleAnswears: string[];
