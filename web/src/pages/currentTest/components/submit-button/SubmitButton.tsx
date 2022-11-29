@@ -23,9 +23,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   handleSubmit,
   deactivateModal,
 }) => {
-  const [processAnswers, loading] = useHttpRequest(testApi.processAnswers, {
-    withLoadingIndicator: true,
-  });
+  const [processAnswers, loading] = useHttpRequest(testApi.processAnswers);
   const { testId } = useParams<CurrentTestParams>();
   const selectedAnswers = useAppSelector(
     (state) => state.currentTest.selectedAnswers
