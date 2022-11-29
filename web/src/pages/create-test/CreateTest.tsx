@@ -52,7 +52,7 @@ export const CreateTest: React.FC = () => {
   }, []);
 
   return (
-    <MainLayout withTabs={false}>
+    <MainLayout withTabs={false} withLinkToIllustrations={false}>
       <Grid container className={styles.title_container}>
         <IconButton onClick={moveBack} className={styles.back_icon}>
           <ArrowBackIcon color={"primary"} />

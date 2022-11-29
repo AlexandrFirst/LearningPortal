@@ -12,6 +12,7 @@ import { Register } from "pages/register/Register";
 import { ActivateUser } from "pages/activate-user/ActivateUser";
 import { Tests } from "pages/tests/Tests";
 import { CreateTest } from "pages/create-test/CreateTest";
+import { CurrentTest } from "pages/currentTest/CurrentTest";
 
 export const AppRouter: React.FC = () => {
   const { isAdmin } = useAuth();
@@ -23,6 +24,10 @@ export const AppRouter: React.FC = () => {
       </Route>
 
       <Route path={`/${AppRoute.Tests}`} element={<Tests />} />
+      <Route
+        path={`/${AppRoute.Tests}/${AppRoute.DynamicTestId}`}
+        element={<CurrentTest />}
+      />
       {isAdmin && (
         <Route
           path={`/${AppRoute.Tests}/${AppRoute.CreateTest}`}

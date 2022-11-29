@@ -95,9 +95,12 @@ export const CreateTestForm: React.FC<CreateTestFormProps> = ({
         tryCount: 0,
         questions: testFormData.questions.map(
           ({ content, answearsList, possibleAnswears }) => ({
-            content: content,
+            content,
             answearsList: answearsList ?? [],
-            possibleAnswears: possibleAnswears ?? [],
+            possibleAnswears: [
+              ...(answearsList ?? []),
+              ...(possibleAnswears ?? []),
+            ],
           })
         ),
       },
