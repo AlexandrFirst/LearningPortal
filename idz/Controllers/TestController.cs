@@ -16,12 +16,19 @@ namespace idz.Controllers
         private readonly DataContext context;
         private readonly IMapper mapper;
         private readonly IEmailService emailService;
+        private readonly IConfiguration configuration;
 
-        public TestController(DataContext context, IMapper mapper, IEmailService emailService)
+        private readonly string teacherMail;
+
+        public TestController(DataContext context, IMapper mapper, 
+            IEmailService emailService, IConfiguration configuration)
         {
             this.context = context;
             this.mapper = mapper;
             this.emailService = emailService;
+            this.configuration = configuration;
+
+            teacherMail = configuration.GetSection("TeacherMail")["Mail"];
         }
 
         [HttpPost("create/{tabId}")]
@@ -120,7 +127,7 @@ namespace idz.Controllers
 
             await emailService.SendEmailAsync(new Dtos.Mail.MailRequest()
             {
-                ToEmail = "teacher@gmail.com",
+                ToEmail = teacherMail,
                 Body = "<p>" + bodyToSend + "</p>",
                 Subject = $"Test results for {test.Name}"
             });
