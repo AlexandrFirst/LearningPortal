@@ -71,10 +71,13 @@ namespace idz.Controllers
             return Ok(response);
         }
 
+
         [HttpPost("proccessAnswers")]
         public async Task<IActionResult> ProcessTestAnswers([FromBody] AnswerListDto testAnswers)
         {
-            int userId = int.Parse(User.Claims.Where(x => x.Type.Equals("UserId")).First().Value);
+            int userId = testAnswers.UserId ?? 0;
+            if(userId == 0)
+                userId = int.Parse(User.Claims.Where(x => x.Type.Equals("UserId")).First().Value);
 
             var test = await context.Tests.FirstOrDefaultAsync(t => t.Id == testAnswers.TestId);
 
@@ -96,8 +99,8 @@ namespace idz.Controllers
                     throw new System.Exception("Take test again please");
                 }
 
-                var realAnswers = trueAnswer.AnswearsList.ToLower().Split('|');
-                var inputAnswers = testAnswers.Answears[i].Answear.ToLower().Split('|');
+                var realAnswers = trueAnswer.PossibleAnswears.ToLower().Split(',');
+                var inputAnswers = testAnswers.Answears[i].Answear.ToLower().Split(',');
                 Array.Sort(realAnswers);
                 Array.Sort(inputAnswers);
 

@@ -14,6 +14,7 @@ namespace idz.Dtos.Test
         public string Surname { get; set; }
         public string Group { get; set; }
 
+        public int? UserId { get; set; }
         public int TestId { get; set; }
         public List<AnswerListItem> Answears { get; set; } 
     }
