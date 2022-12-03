@@ -4,16 +4,17 @@ import {
   GetAllTestRequests,
   IAnswerList,
   ITest,
+  ITestWithTab,
   ProccessAnswersResponse,
   UpdateTestRequest,
 } from "./test.api.types";
 
 class TestApi {
-  getAll({ page, pageSize }: GetAllTestRequests) {
+  getAll({ page, pageSize }: GetAllTestRequests): Promise<ITestWithTab[]> {
     return Get("test/all", { params: { page, pageSize } });
   }
 
-  getById(id: number) {
+  getById(id: number | string): Promise<ITest> {
     return Get(`test/${id}`);
   }
 

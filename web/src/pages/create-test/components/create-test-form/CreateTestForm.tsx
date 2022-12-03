@@ -95,18 +95,17 @@ export const CreateTestForm: React.FC<CreateTestFormProps> = ({
         tryCount: 0,
         questions: testFormData.questions.map(
           ({ content, answearsList, possibleAnswears }) => ({
-            content: content,
+            content,
             answearsList: answearsList ?? [],
-            possibleAnswears: possibleAnswears ?? [],
+            possibleAnswears: [
+              ...(answearsList ?? []),
+              ...(possibleAnswears ?? []),
+            ],
           })
         ),
       },
     });
-    if (!isOk) {
-      dispatch(error({ message }));
-    } else {
-      dispatch(success({ message: "Тест успішно створено" }));
-    }
+    isOk && dispatch(success({ message: "Тест успішно створено" }));
   };
 
   return (

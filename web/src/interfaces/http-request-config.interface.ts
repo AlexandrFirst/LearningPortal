@@ -9,4 +9,5 @@ export interface HttpRequestConfig<T> {
   onLoadingFinish?: () => void;
   withLoadingIndicator: boolean;
   withThrowErr: boolean;
+  withSnackErr?: boolean;
 }

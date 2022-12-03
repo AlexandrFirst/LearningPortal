@@ -26,9 +26,7 @@ export const ActivateUser: React.FC = () => {
 
   useEffect(() => {
     const activate = async () => {
-      const { isOk, data } = await confirmUser(token ?? "");
-      console.log("===data===", data);
-      console.log("===token===", token);
+      const { isOk } = await confirmUser(token ?? "");
       if (!isOk) {
         dispatch(error({ message: "Не вдалося активувати" }));
         navigate(AppRoute.Main);

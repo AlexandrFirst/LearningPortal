@@ -162,10 +162,10 @@ namespace idz.Controllers
                 pageSize = 10;
             }
             var testsToReturn = await context.Tests.Skip(page - 1).Take(pageSize).Select(x => new { 
-                Name = x.Name,
+                Name = x.Name ?? " ",
                 TestId = x.Id,
-                TabName = x.Tab.Name,
-                TabId = x.Tab.Id,
+                TabName = x.Tab == null ? "" : x.Tab.Name,
+                TabId = x.Tab == null ? 0 : x.Tab.Id,
                 Threshold = x.LowThreshold
             }).ToListAsync();
 

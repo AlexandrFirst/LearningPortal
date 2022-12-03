@@ -10,4 +10,7 @@ export enum AppRoute {
   Edit = "edit",
   DynamicTabId = ":tabId",
   DynamicToken = ":token",
+  DynamicTestId = ":testId",
+
+  QueryTabId = "tabId",
 }

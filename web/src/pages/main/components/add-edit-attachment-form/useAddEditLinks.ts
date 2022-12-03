@@ -59,13 +59,11 @@ export const useAddEditLinks = ({
 
   const showSuccessMesssageUpdateTabsAndClose = async () => {
     dispatch(success({ message: "Дані були записані" }));
-    const { data: newTabs, isOk, message } = await getTabs();
-    if (!isOk) {
-      dispatch(error({ message }));
-      return;
+    const { data: newTabs, isOk } = await getTabs();
+    if (isOk) {
+      dispatch(updateTabs(newTabs));
+      handleClose?.();
     }
-    dispatch(updateTabs(newTabs));
-    handleClose?.();
   };
 
   const handleAddLink = async (fileData: FileAttachmentForm) => {
